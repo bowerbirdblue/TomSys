@@ -82,15 +82,24 @@ def open_app_win():
         frame3 = tk.Frame(app_win)
         frame3.place(x=0,y=0,height=830,width=1200)
         def timeset():
-            global current_dname, current_date, current_time, current_min
-            d = dt.datetime.now()
-            current_dname = d.strftime('%A')
-            current_date = d.strftime('%b %d %Y')
-            current_time = d.strftime('%I:%M %p')
-            current_min = d.strftime('%M')
-            ttllbl = tk.Label(frame3, text=f"Today is {current_dname}, {current_date}, and it is {current_time}.", font=(font1, 20)).place(relx=.5,rely=0,anchor="n")
-            def time_updater():
-                if 
+            global calclock
+            def time_update():
+                """
+                updates the time in label calclock
+                """
+                global calclock
+                d = dt.datetime.now()
+                current_dname = d.strftime('%A')
+                current_date = d.strftime('%b %d %Y')
+                current_time = d.strftime('%I:%M %p')
+                current_min = d.strftime('%M')
+                calclock.config(text=f"Today is {current_dname}, {current_date}, and it is {current_time}.")
+                frame3.after(1000,time_update)
+            #global d, current_dname, current_date, current_time, current_min
+            calclock = tk.Label(frame3, font=(font1, 20))
+            calclock.place(relx=.5,rely=0,anchor="n")
+            time_update()
+        timeset()
         tk.Button(frame3, text="Go Back", font=(font1, 15), command=app_win_phase2).place(relx=0.05,rely=.9,anchor="w")
     def view_profile():
             """
@@ -150,7 +159,6 @@ def open_app_win():
         return
     # submit command button
     tk.Button(frame1, text="Submit",font=(font1, 15), command=submit_profile).place(relx=.5,rely=.7,anchor="center")
-   
     # event loop for the app win   
     app_win.mainloop()
 # creating a function to destroy root
